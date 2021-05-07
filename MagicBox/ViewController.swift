@@ -35,7 +35,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
 
-        // Run the view's session
+        
+     
+        
+        ////
+        
+        
+        
+        
+        
+        // Run the view's sessi
+
         sceneView.session.run(configuration)
     }
     
@@ -46,29 +56,48 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
 
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        
         let node = SCNNode()
-     
+        
+        if let imageAnchor = anchor as? ARImageAnchor {
+            
+            let videoNode = SKVideoNode(fileNamed: "iphone.MP4")
+            videoNode.play()
+            let videoScene = SKScene(size: CGSize(width: 886, height: 1920))
+            
+            videoNode.position = CGPoint(x: videoScene.size.width / 2 , y: videoScene.size.height / 2 )
+            videoNode.yScale = -1.0
+            
+            videoScene.addChild(videoNode)
+            
+            
+            let plane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height)
+            
+            plane.firstMaterial?.diffuse.contents = videoScene
+            
+            let planeNode = SCNNode(geometry: plane)
+            
+            planeNode.eulerAngles.x = -.pi / 2
+            node.addChildNode(planeNode)
+            
+        }
+        
         return node
     }
-*/
     
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        
+        
+        
+        
         
     }
     
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
     
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
-    }
+    
+    
+    
+    
 }
